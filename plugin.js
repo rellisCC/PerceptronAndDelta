@@ -33,6 +33,7 @@
     resetModelBtn: $("#resetModelBtn"),
     evaluateBtn: $("#evaluateBtn"),
     showAllCases: $("#showAllCases"),
+    showError: $("#showError"),
     modelStatus: $("#modelStatus"),
 
     viz: $("#viz"),
@@ -110,6 +111,7 @@
        curIndex,
        epoch,
        showAllCases: !!els.showAllCases?.checked,
+       showError: !!els.showError?.checked,
        prevLineActive: !!model.prevLineActive,
        prevLine: model.prevLine || null 
      };
@@ -128,6 +130,10 @@
      if (typeof s.showAllCases === "boolean" && els.showAllCases) {
        els.showAllCases.checked = s.showAllCases;
        showingAll = s.showAllCases;
+     }
+      if (typeof s.showError === "boolean" && els.showError) {
+        els.showError.checked = s.showError;
+        showingError = s.showError;
      }
    
      // restore dataset selection if present
@@ -252,6 +258,7 @@
   let curIndex = 0;
   let epoch = 0;
   let showingAll = false;
+  let showingError = false;
   let lastEval = null;
   let awaitingImprove = false;
 
@@ -1585,6 +1592,10 @@ els.deltaInfo.innerHTML = `
     els.resetModelBtn.addEventListener("click", resetModel);
      els.showAllCases.addEventListener("change", () => {
         showingAll = els.showAllCases.checked;
+        renderViz();
+      });
+    els.showError.addEventListener("change", () => {
+        showingError = els.showError.checked;
         renderViz();
       });
     els.evaluateBtn.addEventListener("click", showEvaluationDialog);
