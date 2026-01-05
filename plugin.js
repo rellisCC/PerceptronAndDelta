@@ -1170,10 +1170,47 @@ function drawPoint(pt, isCurrent) {
 }
    
 function drawErrorSquares() {
-  // Placeholder: Step 3 only.
-  // We'll implement the actual squares later.
-  return;
+  // Real-area squares: side ∝ |error| so area ∝ error^2 (matches MSE + delta rule).
+  const K = 20; // pixels per 1 unit of |error| (tune later)
+
+  const drawOne = (pt) => {
+    if (!pt) return;
+
+    const { error } = errorMetrics(pt);
+    const side = K * Math.abs(error);
+
+    // If error is basically zero, avoid tiny flickery squares
+    if (side < 1) return;
+
+    const cx = sx(pt.feat1);
+    const cy = sy(pt.feat2);
+
+    const x = cx - side / 2;
+    const y = cy - side / 2;
+
+    const stroke = (pt.label >= 0) ? "orange" : "purple";
+
+    const r = svgEl("rect", {
+      x, y,
+      width: side,
+      height: side,
+      fill: "none",
+      stroke,
+      "stroke-width": 2,
+      opacity: 0.6,
+      "pointer-events": "none" // IMPORTANT: keep points clickable
+    });
+
+    els.viz.appendChild(r);
+  };
+
+  if (showingAll) {
+    cases.forEach(drawOne);
+  } else {
+    drawOne(cases[curIndex]);
+  }
 }
+
    
 function renderViz() {
   // ensure bounds reflect latest cases, but keep fixed mins
