@@ -30,6 +30,17 @@
     cVal: $("#cVal"),
     lrVal: $("#lrVal"),
 
+   // Delta tab controls (batch mode UI)
+    deltaLr: $("#deltaLr"),
+    deltaLrVal: $("#deltaLrVal"),
+    btnDeltaBatch: $("#btnDeltaBatch"),
+    btnDeltaReset: $("#btnDeltaReset"),
+    evaluateBtnDelta: $("#evaluateBtnDelta"),
+    toggleMathDelta: $("#toggleMathDelta"),
+    mathCardDelta: $("#mathCardDelta"),
+    deltaMathInfo: $("#deltaMathInfo"),
+
+     
     resetModelBtn: $("#resetModelBtn"),
     evaluateBtn: $("#evaluateBtn"),
     showAllCases: $("#showAllCases"),
@@ -1654,6 +1665,21 @@ els.deltaInfo.innerHTML = `
         renderViz();
       });
 
+     // Delta tab: learning-rate label + show/hide math card
+if (els.deltaLr && els.deltaLrVal) {
+  const syncDeltaLrLabel = () => {
+    els.deltaLrVal.textContent = Number(els.deltaLr.value).toFixed(2);
+  };
+  syncDeltaLrLabel();
+  els.deltaLr.addEventListener("input", syncDeltaLrLabel);
+}
+
+if (els.toggleMathDelta && els.mathCardDelta) {
+  els.toggleMathDelta.addEventListener("change", () => {
+    els.mathCardDelta.style.display = els.toggleMathDelta.checked ? "block" : "none";
+  });
+}
+     
     const tabDelta = document.getElementById("tabDelta");
     const tabPerceptron = document.getElementById("tabPerceptron");
     const panelPerceptron = document.getElementById("panelPerceptron");
@@ -1676,6 +1702,7 @@ els.deltaInfo.innerHTML = `
      });
      
     els.evaluateBtn.addEventListener("click", showEvaluationDialog);
+    els.evaluateBtnDelta?.addEventListener("click", showEvaluationDialog);
     els.btnCorrect.addEventListener("click", studentSaysCorrect);
     els.btnFail.addEventListener("click", studentSaysFail);
     els.btnNextAfterImprove.addEventListener("click", afterImproveNext);
