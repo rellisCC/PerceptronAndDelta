@@ -1171,7 +1171,7 @@ function drawPoint(pt, isCurrent) {
    
 function drawErrorSquares() {
   // Real-area squares: side ∝ |error| so area ∝ error^2 (matches MSE + delta rule).
-  const K = 20; // pixels per 1 unit of |error| (tune later)
+  const K = 40; // pixels per 1 unit of |error| (tune later)
 
   const drawOne = (pt) => {
     if (!pt) return;
