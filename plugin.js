@@ -1655,20 +1655,24 @@ els.deltaInfo.innerHTML = `
 
     const tabDelta = document.getElementById("tabDelta");
     const tabPerceptron = document.getElementById("tabPerceptron");
+    const panelPerceptron = document.getElementById("panelPerceptron");
+    const panelDelta = document.getElementById("panelDelta");
    
       tabDelta.addEventListener("click", () => {
-        learningRule = "delta";
-        tabDelta.classList.add("active");
-        tabPerceptron.classList.remove("active");
-        updateRuleUI();
-      });
-      
-      tabPerceptron.addEventListener("click", () => {
-        learningRule = "perceptron";
-        tabPerceptron.classList.add("active");
-        tabDelta.classList.remove("active");
-        updateRuleUI();
-      });
+      tabDelta.classList.add("active");
+      tabPerceptron.classList.remove("active");
+
+       panelDelta.style.display = "";
+       panelPerceptron.style.display = "none";
+     });
+   
+     tabPerceptron.addEventListener("click", () => {
+       tabPerceptron.classList.add("active");
+       tabDelta.classList.remove("active");
+   
+       panelPerceptron.style.display = "";
+       panelDelta.style.display = "none";
+     });
      
     els.evaluateBtn.addEventListener("click", showEvaluationDialog);
     els.btnCorrect.addEventListener("click", studentSaysCorrect);
