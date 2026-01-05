@@ -175,6 +175,7 @@ dialog { border: 1px solid #ddd; border-radius: 12px; padding: 14px; }
   margin-top: 8px;
   margin-bottom: 10px;
   align-items: flex-end;
+  border-bottom: 1px solid #cfcfcf; /* the long “folder seam” line */
 }
 
 .tab {
@@ -188,14 +189,20 @@ dialog { border: 1px solid #ddd; border-radius: 12px; padding: 14px; }
   font: inherit;
   cursor: pointer;
   line-height: 1;
+
+  margin-bottom: -1px; /* sit on the seam line */
+  position: relative;
+  z-index: 1;
 }
 
 /* Active tab looks connected to the card content */
 .tab.active {
   background: #ffffff;
-  border-bottom-color: #ffffff; /* “merges” into the card */
+  border-bottom-color: #ffffff; /* “breaks” the seam line under the active tab */
   opacity: 1;
+  z-index: 2;
 }
+
 
 /* Inactive tabs look faded */
 .tab:not(.active) {
