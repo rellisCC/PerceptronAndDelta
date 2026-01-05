@@ -463,6 +463,14 @@ const values = SAMPLE_SPEC.cases.map(row => {
   function scorePoint(pt) {
     return model.w1 * pt.feat1 + model.w2 * pt.feat2 + model.c;
   }
+
+     function errorMetrics(pt) {
+    const score = scorePoint(pt);
+    const error = (pt.label - score);
+    const squaredError = error * error;
+    return { score, error, squaredError };
+  }
+   
 const SCORE_EPS = 1e-6;
 
 function predFromScore(s) {
