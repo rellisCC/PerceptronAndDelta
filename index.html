@@ -194,10 +194,42 @@
 </div>
 </div> <!-- end panelPerceptron -->
 
-  <div id="panelDelta" class="rule-panel" style="display:none;">
-    <div class="rule-goal">
-      <b>Delta Rule Goal:</b> Find the formula that will correctly label each case as +1 or -1.
-    </div>
+    <div id="panelDelta" class="rule-panel" style="display:none;">
+      <div class="rule-goal">
+        <b>Delta Rule Goal:</b> Find the formula that will be closest at labeling each case as +1 or -1. Do this by reducing the average size of the error squares (Mean Squared Error).
+      </div>
+    
+      <div class="math-and-lr">
+        <label class="lr-inline">
+          <span>Learn rate (default 0.1):</span>
+          <input id="deltaLr" type="range" min="0" max="1" step="0.01" value="0.1"/>
+          <span class="mono" id="deltaLrVal"></span>
+        </label>
+      </div>
+    
+      <div class="btnrow">
+        <span>Batch adjustment (use all cases at once):</span>
+        <button id="btnDeltaBatch" class="learn-btn learn-improve">🔁 Run one batch delta update</button>
+        <button id="btnDeltaReset" class="learn-btn">↩︎ Reset to start of batch</button>
+      </div>
+    
+      <div class="hint">
+        Tip: Click <b>Evaluate model</b> to show all points and compute Accuracy and Mean Squared Error.
+      </div>
+    
+      <div class="btnrow">
+        <button id="evaluateBtnDelta">Evaluate model</button>
+      </div>
+    
+      <label class="math-toggle">
+        <input type="checkbox" id="toggleMathDelta">
+        <span>Show math for delta rule</span>
+      </label>
+    
+      <!-- Delta math / worked examples -->
+      <div id="mathCardDelta" class="panel" style="display:none; max-height:640px; overflow:auto;">
+        <div class="mono" id="deltaMathInfo"></div>
+      </div>
   </div> <!-- end panelDelta -->
       
 </div> <!-- end weight-card -->
