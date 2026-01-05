@@ -1178,6 +1178,8 @@ function renderViz() {
   drawAxes();
   drawDecisionLine();
 
+  if (showingError) drawErrorSquares();
+   
   if (showingAll) {
     cases.forEach(pt => drawPoint(pt, false));
   } else {
