@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Perceptron Trainer (CODAP Plugin)</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Transport layer (UMD dist). This avoids your local file triggering CSP eval issues. -->
+  <script src="https://cdn.jsdelivr.net/npm/iframe-phone@1.2.0/dist/iframe-phone.js"></script>
+
+</head>
+
+<body>
+  <header>
+    <div class="title">Can you find the best feature weights to use to correctly classify data into two categories?</div>
+    <div class="subtitle">Use one point at a time and the Perceptron Rule to adjust feature weights!</div>
+  </header>
+
+  <section class="row">
+    <div class="card grow">
+      <div class="card-title">Data</div>
+
+      <div class="btnrow">
+        <button id="loadSampleBtn">Load Sample Dataset</button>
+        <button id="refreshBtn">Find All Datasets</button>
+        <button id="resetSampleBtn">Reset Sample Dataset</button>
+      </div>
+      
+      <label class="field">
+        <span>Dataset</span>
+        <select id="datasetSelect"></select>
+      </label>
+
+      <label class="field" id="collectionField" style="display:none;">
+      <span>Table</span>
+      <select id="collectionSelect"></select>
+      </label>
+      
+      <div class="hint">
+        Click <b>Load Sample Dataset</b> use the pre-made sample. 
+        Alternatively, you can create your own data table with columns
+        <code>ID</code>, <code>feat1</code>, <code>feat2</code>, and <code>label</code> (Neg=-1; Pos=+1)
+        and then click <b>Find All Datasets</b> to add it to the dropdown menu.
+      </div>
+
+
+
+      <div class="status" id="dataStatus">Not connected yet…</div>
+    </div>
+  </section>
+
+  <section class="row" style="flex-wrap:nowrap; align-items:flex-start;">
+
+  <!-- LEFT: graph + point info + buttons -->
+  <div class="card" style="flex:1; min-width:560px;">
+    <div class="card-title">Examine the Model</div>
+
+        <label class="field">
+        <span>w1</span>
+        <input id="w1" type="range" min="-1" max="1" step="0.05" value="0.4"/>
+        <span class="mono" id="w1Val"></span>
+      </label>
+
+      <label class="field">
+        <span>w2</span>
+        <input id="w2" type="range" min="-1" max="1" step="0.05" value="-0.4"/>
+        <span class="mono" id="w2Val"></span>
+      </label>
+
+      <label class="field">
+        <span>c</span>
+        <input id="c" type="range" min="-5" max="5" step="0.1" value="2"/>
+        <span class="mono" id="cVal"></span>
+      </label>
+
+          <div class="btnrow">
+        <button id="resetModelBtn">Reset model</button>
+
+        <label class="chk">
+          <input type="checkbox" id="showAllCases">
+          <span>Show all cases</span>
+        </label>
+      </div>
+
+    <div class="status mono" id="modelStatus"></div>
+    
+    <div class="viz-wrap">
+      <svg id="viz" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="panel">
+      <div class="panel-row">
+        <div><b>Current point</b>: <span class="mono" id="ptInfo">—</span></div>
+        <div><b>Epoch</b>: <span class="mono" id="epochInfo">0</span> &nbsp; <b>Case</b>: <span class="mono" id="indexInfo">—</span></div>
+      </div>
+
+      <div class="panel-row">
+        <div><b>Model prediction</b>: <span class="mono" id="predInfo">—</span></div>
+        <div><b>True label</b>: <span class="mono" id="sentInfo">—</span></div>
+      </div>
+    </div>
+    <div class="hint">
+      Note: On this graph, positive cases have an <b><span style="color: #CC5500;">orange</span></b> point and negative cases have a <b><span style="color: purple;">purple</span></b> point. The <span style = "color: #E3963E;"><b>shaded orange</b></span> section is where the model predicts cases as <b>positive</b> (+1). 
+    </div>
+  </div> <!-- end graph card -->
+
+<!-- Right side math learning card -->
+    
+    <div class="card weight-card" style="flex:2; min-width:420px;">
+      <div class="card-title">Improve Feature Weights with the Perceptron Rule</div>
+      
+    <div class="math-and-lr">
+      <label class="lr-inline">
+        <span>Learn rate (default 0.1):</span>
+        <input id="lr" type="range" min="0" max="1" step="0.01" value="0.1"/>
+        <span class="mono" id="lrVal"></span>
+      </label>
+    </div>
+
+    <div class="btnrow">
+      <span>Step through the weight adjustment process:</span>
+      <button id="btnCorrect" class="learn-btn learn-good">✔︎ Model correctly predicts point. Proceed to next point.</button>
+      <button id="btnFail" class="learn-btn learn-bad">❌ Model fails. Must improve!</button>
+      <button id="btnNextAfterImprove" class="learn-btn learn-improve"disabled>🔧 Model improved. Check next point.</button>
+    </div>
+
+    <div class="hint">
+      Tip: When you feel like the model has improved enough, click <b>Evaluate model</b> to show all points and compute total error.
+    </div>
+      
+      <div class="btnrow">
+        <button id="evaluateBtn">Evaluate model</button>
+      </div>
+      
+
+       <label class="math-toggle">
+        <input type="checkbox" id="toggleMath">
+        <span>Show math for adjusting weights</span>
+      </label>
+
+      <dialog id="alertDlg">
+        <div class="dlg-title">Check again!</div>
+        <div class="dlg-body" id="alertMsg">Does the current rule properly predict this point?</div>
+        <div class="dlg-actions"><button id="alertOk">OK</button></div>
+      </dialog>
+    
+      <dialog id="evalDlg">
+        <div class="dlg-title">Model Evaluation</div>
+        <div class="dlg-body">
+          <div class="mono" id="evalSummary">
+          <div><b>Cases:</b> <span id="evalCases">-</span></div>
+
+          <div style="margin-top:10px;">
+          <div><b>Accuracy:</b> <span id="evalAccuracy">-</span></div>
+          <div class="hint">Accuracy calculates the percent of cases the model predicts correctly.</div>
+          </div>
+
+          <div style="margin-top:10px;">
+          <div><b>Mean Squared Error:</b> <span id="evalMSE">-</span></div>
+          <div class="hint"> Mean Squared Error calculates how close the model’s predictions are to the true labels, not just whether they are correct.</div>
+          </div>
+         </div>
+        </div>
+        <div class="dlg-actions">
+          <button id="evalClose"><b>Go back to training</b></button>
+        </div>
+      </dialog>
+      
+    <!-- Below, open up the math for learning weights-->
+ <div id="mathCard" class="panel" style="display:none; max-height:640px; overflow:auto;">
+  <div class="mono" id="deltaInfo"></div>
+</div>
+  </div>
+     </div>
+</section>
+
+
+
+
+  <!-- Sample dataset + plugin logic -->
+  <script src="sample-data.js"></script>
+  <script src="plugin.js"></script>
+</body>
+</html>
+
