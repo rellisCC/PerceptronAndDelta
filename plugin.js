@@ -1160,7 +1160,13 @@ function drawPoint(pt, isCurrent) {
    }
 
 }
-
+   
+function drawErrorSquares() {
+  // Placeholder: Step 3 only.
+  // We'll implement the actual squares later.
+  return;
+}
+   
 function renderViz() {
   // ensure bounds reflect latest cases, but keep fixed mins
   updateAxesBounds();
