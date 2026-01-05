@@ -1268,6 +1268,7 @@ function renderViz() {
       els.ptInfo.textContent = "—";
       els.indexInfo.textContent = "—";
       els.epochInfo.textContent = "—";
+      els.scoreInfo.textContent = "—";
       els.predInfo.textContent = "—";
       els.sentInfo.textContent = "—";
       els.deltaInfo.textContent = "";
@@ -1288,7 +1289,7 @@ function renderViz() {
     els.epochInfo.textContent = String(epoch);
     els.indexInfo.textContent = String(curIndex + 1) + " / " + String(cases.length);
 
-   // els.scoreInfo.textContent = s.toFixed(3);
+    els.scoreInfo.textContent = s.toFixed(3);
     els.predInfo.textContent = (yhat === 1 ? "+1 (Positive)" : "-1 (Negative)");
     els.sentInfo.textContent = (pt.label === 1 ? "+1 (Positive)" : "-1 (Negative)");
   //  els.mistakeInfo.textContent = mistake ? "YES" : "no";
