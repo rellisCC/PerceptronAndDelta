@@ -259,6 +259,7 @@
   let epoch = 0;
   let showingAll = false;
   let showingError = false;
+  let learningRule = "perceptron"; // or "delta"
   let lastEval = null;
   let awaitingImprove = false;
 
@@ -1651,6 +1652,24 @@ els.deltaInfo.innerHTML = `
         showingError = els.showError.checked;
         renderViz();
       });
+
+    const tabDelta = document.getElementById("tabDelta");
+    const tabPerceptron = document.getElementById("tabPerceptron");
+   
+      tabDelta.addEventListener("click", () => {
+        learningRule = "delta";
+        tabDelta.classList.add("active");
+        tabPerceptron.classList.remove("active");
+        updateRuleUI();
+      });
+      
+      tabPerceptron.addEventListener("click", () => {
+        learningRule = "perceptron";
+        tabPerceptron.classList.add("active");
+        tabDelta.classList.remove("active");
+        updateRuleUI();
+      });
+     
     els.evaluateBtn.addEventListener("click", showEvaluationDialog);
     els.btnCorrect.addEventListener("click", studentSaysCorrect);
     els.btnFail.addEventListener("click", studentSaysFail);
