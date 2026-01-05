@@ -1,4 +1,5 @@
-# 2D Perceptron Trainer CODAP Plugin (Temp - This was generated via vibe coding with ChatGPT 5.2)
+# 2D Text Classifier CODAP plugin - Set weights via perceptron rule or delta rulePerceptron Trainer CODAP Plugin (Generated via vibe coding with ChatGPT 5.2)
+It is currently a copy of one of my other projects. Read me to be updated at a later point. 
 
 This is a lightweight CODAP Data Interactive Plugin that implements a one-point-at-a-time perceptron training workflow.
 
